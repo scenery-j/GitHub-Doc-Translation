@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
-import java.io.FileReader;
+import java.io.StringReader;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.time.Duration;
@@ -34,10 +34,10 @@ public class GitHubTokenManager {
     public GitHubTokenManager(
             StringRedisTemplate redisTemplate,
             @Value("${github.app.id}") String appId,
-            @Value("${github.app.private-key-path}") String privateKeyPath) throws Exception {
+            @Value("${github.app.private-key}") String privateKeyContent) throws Exception {
         this.redisTemplate = redisTemplate;
         this.appId = appId;
-        this.privateKey = loadPrivateKey(privateKeyPath);
+        this.privateKey = loadPrivateKey(privateKeyContent);
         this.restClient = RestClient.builder()
                 .baseUrl("https://api.github.com")
                 .build();
@@ -97,8 +97,10 @@ public class GitHubTokenManager {
                 .compact();
     }
 
-    private RSAPrivateKey loadPrivateKey(String privateKeyPath) throws Exception {
-        try (PEMParser parser = new PEMParser(new FileReader(privateKeyPath))) {
+    private RSAPrivateKey loadPrivateKey(String privateKeyContent) throws Exception {
+        // 支持环境变量中以 \n 字面量表示换行的情况
+        String normalizedPem = privateKeyContent.replace("\\n", "\n");
+        try (PEMParser parser = new PEMParser(new StringReader(normalizedPem))) {
             Object obj = parser.readObject();
             JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
             if (obj instanceof PEMKeyPair keyPair) {

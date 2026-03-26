@@ -70,7 +70,7 @@ github:
     id: ${GITHUB_APP_ID}
     client-id: ${GITHUB_APP_CLIENT_ID}
     client-secret: ${GITHUB_APP_CLIENT_SECRET}
-    private-key-path: ${GITHUB_APP_PRIVATE_KEY_PATH:./github-app-private-key.pem}
+    private-key: ${GITHUB_APP_PRIVATE_KEY}
     webhook-secret: ${GITHUB_APP_WEBHOOK_SECRET}
     # GitHub App slug (显示在安装URL中: https://github.com/apps/{slug}/installations/new)
     slug: ${GITHUB_APP_SLUG:doc-translation-github-app}
