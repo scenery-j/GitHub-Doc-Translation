@@ -1,0 +1,94 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    # Spring Boot 原生支持加载 .env 文件（[.properties] 表示按 key=value 格式解析）
+    # optional: 表示文件不存在时不报错（Docker 环境变量由容器直接注入，无需此文件）
+    # 同时兼容两种工作目录：从项目根目录运行 和 从 doc_translation_service 目录运行
+    import:
+      - "optional:file:.env[.properties]"
+      - "optional:file:../.env[.properties]"
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/doc_translation}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:root}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 10
+
+  ai:
+    openai:
+      # Platform-level OpenRouter API key (users can override with their own key in Settings)
+      api-key: ${OPENROUTER_API_KEY:placeholder}
+      # OpenRouter is fully OpenAI-compatible; Spring AI appends /v1/chat/completions automatically
+      base-url: https://openrouter.ai/api
+      chat:
+        options:
+          model: nvidia/nemotron-3-super-120b-a12b:free
+          temperature: 0.3
+          max-tokens: 8192
+        # Spring AI 1.1.x: completions path relative to base-url
+        completions-path: /v1/chat/completions
+
+  threads:
+    virtual:
+      enabled: true
+
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd'T'HH:mm:ss'Z'
+    time-zone: UTC
+
+# GitHub App Configuration
+github:
+  app:
+    id: ${GITHUB_APP_ID}
+    client-id: ${GITHUB_APP_CLIENT_ID}
+    client-secret: ${GITHUB_APP_CLIENT_SECRET}
+    private-key-path: ${GITHUB_APP_PRIVATE_KEY_PATH:./github-app-private-key.pem}
+    webhook-secret: ${GITHUB_APP_WEBHOOK_SECRET}
+    # GitHub App slug (显示在安装URL中: https://github.com/apps/{slug}/installations/new)
+    slug: ${GITHUB_APP_SLUG:doc-translation-github-app}
+
+# Application Settings
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  jwt:
+    secret: ${JWT_SECRET:changeme-at-least-32-characters-long-secret}
+    expiration-days: 7
+  encryption:
+    key: ${ENCRYPTION_KEY:changeme-32-char-aes-key-for-dev!}
+  translation:
+    max-concurrent: 20        # file-level concurrency per task
+    max-concurrent-tasks: 10   # task-level concurrency (consumer threads)
+    task-queue-size: 100
+
+logging:
+  level:
+    com.gitdoc.translation: INFO
+    org.springframework.security: WARN

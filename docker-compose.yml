@@ -1,0 +1,155 @@
+# =============================================================
+# Docker Compose 生产部署编排文件
+# 包含 4 个服务：postgres / redis / backend / frontend
+#
+# 使用方式：
+#   1. 复制 .env.example 为 .env 并填写真实配置
+#   2. 将 GitHub App 私钥放到 ./github-app-private-key.pem
+#   3. docker compose up -d --build
+#
+# 访问：http://localhost（80 端口）
+# =============================================================
+
+services:
+
+  # ── PostgreSQL 数据库 ───────────────────────────────────────
+  postgres:
+    image: postgres:17-alpine          # Alpine 版镜像体积更小
+    container_name: doc_trans_postgres
+    restart: unless-stopped            # 容器异常退出时自动重启，手动 stop 不重启
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME:-doc_translation}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      # 数据持久化：将数据库文件挂载到宿主机命名卷，容器重建后数据不丢失
+      - postgres_data:/var/lib/postgresql/data
+    # 健康检查：确保数据库真正就绪后，后端才会启动
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME:-dev} -d ${DATABASE_NAME:-doc_translation}" ]
+      interval: 10s    # 每 10 秒检查一次
+      timeout: 5s      # 超时 5 秒视为失败
+      retries: 5       # 连续 5 次失败才标记为 unhealthy
+      start_period: 15s  # 容器启动后等待 15 秒再开始健康检查（给 PG 预热时间）
+    # 数据库不对外暴露端口，只在 Docker 内部网络中访问（更安全）
+    # 如果本地开发需要用 DataGrip 连接，可临时取消下面的注释：
+    ports:
+      - "5432:5432"
+
+  # ── Redis 缓存 ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: doc_trans_redis
+    restart: unless-stopped
+    # AOF 持久化：每秒将写操作追加到文件，重启后可恢复数据
+    command: redis-server --appendonly yes --loglevel warning
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    # 同样不对外暴露，仅内部访问
+    # ports:
+    #   - "6379:6379"
+
+  # ── 后端服务（Spring Boot）──────────────────────────────────
+  backend:
+    # build.context 指定 Dockerfile 所在目录
+    build:
+      context: ./doc_translation_service
+      dockerfile: Dockerfile
+    container_name: doc_trans_backend
+    restart: unless-stopped
+    # depends_on + condition 确保数据库和 Redis 健康后才启动后端
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # ── 数据库连接 ──────────────────────────────────────────
+      # "postgres" 是上面 postgres 服务的名称，Docker 内部 DNS 自动解析为容器 IP
+      DATABASE_URL: jdbc:postgresql://postgres:5432/${DATABASE_NAME:-doc_translation}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+      # ── Redis 连接 ──────────────────────────────────────────
+      REDIS_HOST: redis    # Docker 内部服务名
+      REDIS_PORT: 6379
+
+      # ── GitHub App 配置（必填）─────────────────────────────
+      GITHUB_APP_ID: ${GITHUB_APP_ID}
+      GITHUB_APP_CLIENT_ID: ${GITHUB_APP_CLIENT_ID}
+      GITHUB_APP_CLIENT_SECRET: ${GITHUB_APP_CLIENT_SECRET}
+      GITHUB_APP_WEBHOOK_SECRET: ${GITHUB_APP_WEBHOOK_SECRET}
+      GITHUB_APP_SLUG: ${GITHUB_APP_SLUG}
+      # 私钥在容器内的路径（与下方 volumes 挂载路径一致）
+      GITHUB_APP_PRIVATE_KEY_PATH: /app/github-app-private-key.pem
+
+      # ── AI 翻译 ─────────────────────────────────────────────
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+
+      # ── 应用安全配置 ─────────────────────────────────────────
+      JWT_SECRET: ${JWT_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+
+      # ── 前端地址（OAuth 回调后重定向用）───────────────────────
+      # 生产环境填写实际域名，如 https://yourdomain.com
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+
+      # ── JVM 时区 ─────────────────────────────────────────────
+      TZ: Asia/Shanghai
+
+    volumes:
+      # 将宿主机的 GitHub App 私钥挂载到容器内（只读模式，:ro）
+      # 私钥绝对不能打进镜像，通过挂载注入是最安全的方式
+      - ./doc-translation-github-app.private-key.pem:/app/github-app-private-key.pem:ro
+    # 后端不对外暴露端口，通过前端 Nginx 反代访问（更安全）
+    # 如需直接调试 API，可临时取消注释：
+    ports:
+      - "8080:8080"
+    healthcheck:
+      # 调用自定义健康检查接口 GET /api/health
+      # --spider：只发 HEAD 请求，非 2xx 状态码返回非零退出码
+      # wget 是 eclipse-temurin:21-jre-alpine 内置的 BusyBox 工具，无需安装
+      test: [ "CMD-SHELL", "curl -sf http://localhost:8080/api/health || exit 1" ]
+      interval: 30s      # 每 30 秒探测一次（与 Dockerfile 中保持一致）
+      timeout: 5s        # 单次探测超时 5 秒
+      retries: 3         # 连续 3 次失败才标记 unhealthy
+      start_period: 60s  # Spring Boot 冷启动约需 30-60 秒，预留足够预热时间
+
+  # ── 前端服务（Nginx + Vue 静态文件）────────────────────────
+  frontend:
+    build:
+      context: ./doc_translation_website
+      dockerfile: Dockerfile
+    container_name: doc_trans_frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy  # 等后端健康后才启动 Nginx
+    ports:
+      # 只有前端对外暴露 80 端口，是整个系统唯一的入口
+      # 所有流量由 Nginx 分发：静态文件 → Vue，/api/* → 后端
+      - "80:80"
+      # 如果需要 HTTPS，可以在这里加 443:443，并在 nginx.conf 中配置证书
+    healthcheck:
+      # 探测 Nginx 是否正常响应 HTTP 请求
+      # nginx:alpine 内置 BusyBox wget，--spider 检查 HTTP 状态码
+      test: [ "CMD-SHELL", "wget --spider -q http://localhost/ || exit 1" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s  # Nginx 启动极快，10 秒足够
+
+# ── 命名卷（数据持久化）───────────────────────────────────────
+# 命名卷由 Docker 管理，存储在宿主机的 /var/lib/docker/volumes/
+# 容器删除重建后数据仍然保留
+volumes:
+  postgres_data:
+    name: doc_trans_postgres_data
+  redis_data:
+    name: doc_trans_redis_data
