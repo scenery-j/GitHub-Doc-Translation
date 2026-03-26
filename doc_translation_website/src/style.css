@@ -1,0 +1,364 @@
+/* Global Styles — GitHub Doc Translation */
+/* Design System: Modern Developer Tool | Clean Light Theme */
+
+:root {
+    /* ── Element Plus Primary Color Override ── */
+    --el-color-primary: #DE2910;
+    --el-color-primary-light-3: #e75540;
+    --el-color-primary-light-5: #ef8a76;
+    --el-color-primary-light-7: #f7bfb9;
+    --el-color-primary-light-8: #fad5d1;
+    --el-color-primary-light-9: #fef2f0;
+    --el-color-primary-dark-2: #b8220d;
+
+    /* ── Brand ── */
+    --chinese-red: #DE2910;
+    --chinese-red-light: #fef2f0;
+    --chinese-red-border: #fdd0cb;
+    --chinese-red-hover: #b8220d;
+
+    /* ── Typography ── */
+    --font-primary: 'IBM Plex Sans', -apple-system, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+    /* ── Spacing Scale ── */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+
+    /* ── Layout ── */
+    --sidebar-width: 220px;
+    --sidebar-collapsed-width: 64px;
+    --header-height: 60px;
+
+    /* ── Shadows ── */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.10), 0 4px 8px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
+    --shadow-red: 0 4px 16px rgba(222, 41, 16, 0.25);
+
+    /* ── Borders ── */
+    --border-color: #E4E7ED;
+    --border-color-hover: #C8D0DC;
+    --border-color-focus: var(--chinese-red);
+    --border-radius-xs: 4px;
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-full: 9999px;
+
+    /* ── Colors ── */
+    --bg-page: #F7F8FA;
+    --bg-card: #FFFFFF;
+    --bg-subtle: #F1F4F8;
+    --bg-hover: #F5F7FA;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+    --text-placeholder: #B0BAC9;
+
+    /* ── Status Colors ── */
+    --color-success: #16A34A;
+    --color-success-bg: #F0FDF4;
+    --color-success-border: #BBF7D0;
+    --color-warning: #D97706;
+    --color-warning-bg: #FFFBEB;
+    --color-warning-border: #FDE68A;
+    --color-danger: #DC2626;
+    --color-danger-bg: #FEF2F2;
+    --color-danger-border: #FECACA;
+    --color-info: #2563EB;
+    --color-info-bg: #EFF6FF;
+    --color-info-border: #BFDBFE;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: var(--bg-page);
+}
+
+#app {
+    height: 100%;
+    font-family: var(--font-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+code, pre, .mono {
+    font-family: var(--font-mono);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+/* ── Element Plus Overrides ── */
+.el-button--primary {
+    --el-button-bg-color: var(--chinese-red);
+    --el-button-border-color: var(--chinese-red);
+    --el-button-hover-bg-color: var(--chinese-red-hover);
+    --el-button-hover-border-color: var(--chinese-red-hover);
+    --el-button-active-bg-color: #9a1b0b;
+    font-weight: 500;
+}
+
+.el-tag--primary {
+    --el-tag-bg-color: var(--chinese-red-light);
+    --el-tag-border-color: var(--chinese-red-border);
+    --el-tag-text-color: var(--chinese-red);
+}
+
+.el-menu-item.is-active {
+    color: var(--chinese-red) !important;
+    background-color: var(--chinese-red-light) !important;
+}
+
+.el-menu-item.is-active .el-icon {
+    color: var(--chinese-red) !important;
+}
+
+.el-table {
+    --el-table-header-bg-color: var(--bg-page);
+    --el-table-header-text-color: var(--text-secondary);
+    --el-table-tr-bg-color: var(--bg-card);
+    --el-table-border-color: var(--border-color);
+    font-size: 13.5px;
+}
+
+.el-table th {
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.el-pagination {
+    --el-pagination-font-size: 13px;
+}
+
+/* ── Page Layout Helpers ── */
+.page-container {
+    padding: var(--spacing-xl);
+    max-width: 1400px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ── Sticky top bar ── */
+.sticky-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 14px var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.sticky-bar .page-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.sticky-bar .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.sticky-bar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sticky-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ── Card System ── */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.card-interactive {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.card-interactive:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-color-hover);
+    transform: translateY(-1px);
+}
+
+/* ── Stat Cards ── */
+.stat-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.18s ease;
+}
+
+.stat-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-color-hover);
+    transform: translateY(-1px);
+}
+
+/* ── Status Indicators ── */
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-dot.active {
+    background: #16A34A;
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+.status-dot.paused {
+    background: #D97706;
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2);
+}
+
+.status-dot.error {
+    background: #DC2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+}
+
+/* ── Dot Grid Background Pattern ── */
+.dot-bg {
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.055) 1px, transparent 1px);
+    background-size: 22px 22px;
+}
+
+/* ── Badge Styles ── */
+.badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: var(--border-radius-full);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-pill.red {
+    background: var(--chinese-red-light);
+    border: 1px solid var(--chinese-red-border);
+    color: var(--chinese-red);
+}
+
+/* ── Transitions ── */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/* ── Cursor ── */
+.clickable {
+    cursor: pointer;
+}
+
+/* ── Animations ── */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+.spinning {
+    animation: spin 0.8s linear infinite;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+    .page-container {
+        padding: var(--spacing-lg);
+    }
+}
