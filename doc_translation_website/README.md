@@ -1,3 +1,8 @@
+<!--TRANSLATION_LINKS_START-->
+#### Supported by [GitHub Doc Translation](https://github.com/scenery-j/GitHub-Doc-Translation)
+> 📖 **其他语言版本**：[English (en)](../translations/en/doc_translation_website/README.md) | [日本語 (ja)](../translations/ja/doc_translation_website/README.md) | [한국어 (ko)](../translations/ko/doc_translation_website/README.md)
+<!--TRANSLATION_LINKS_END-->
+
 # GitHub Doc Translation — 前端快速启动说明
 
 > **前端技术栈**: Vue 3 + Vite + Element Plus + TypeScript + Pinia + Vue Router

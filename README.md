@@ -1,3 +1,8 @@
+<!--TRANSLATION_LINKS_START-->
+#### Supported by [GitHub Doc Translation](https://github.com/scenery-j/GitHub-Doc-Translation)
+> 📖 **其他语言版本**：[English (en)](translations/en/README.md) | [日本語 (ja)](translations/ja/README.md) | [한국어 (ko)](translations/ko/README.md)
+<!--TRANSLATION_LINKS_END-->
+
 # GitHub Doc Translation
 
 <p align="center">
