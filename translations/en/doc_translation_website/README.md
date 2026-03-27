@@ -1,6 +1,11 @@
-# GitHub DocTranslation — Frontend Quick Start Guide
+<!--TRANSLATION_LINKS_START-->
+#### Supported by [GitHub Doc Translation](https://github.com/scenery-j/GitHub-Doc-Translation)
+> 📖 **Other language versions**: [English (en)](../translations/en/doc_translation_website/README.md) | [日本語 (ja)](../translations/ja/doc_translation_website/README.md) | [한국어 (ko)](../translations/ko/doc_translation_website/README.md)
+<!--TRANSLATION_LINKS_END-->
 
-> **Frontend Tech Stack**: Vue 3 + Vite + Element Plus + TypeScript + Pinia + Vue Router
+# GitHub Doc Translation — Frontend Quick Start Guide
+
+> **Frontend tech stack**: Vue 3 + Vite + Element Plus + TypeScript + Pinia + Vue Router
 
 ---
 
@@ -26,9 +31,7 @@
 
 Verification:
 
-%%CODEBLOCK_0%%
-
----
+%%CODEBLOCK_0%%---
 
 ## Quick Start
 
@@ -42,9 +45,7 @@ Verification:
 
 > Visit [http://localhost:5173](http://localhost:5173)
 
-### 3. Prerequisite: Backend Service
-
-The frontend development server by default proxies `/api/*` requests to `http://localhost:8080` (backend Spring Boot service).
+### 3. Prerequisite: Backend ServiceThe frontend development server by default proxies `/api/*` requests to `http://localhost:8080` (Spring Boot backend service).
 
 Please ensure the backend service is running:
 
@@ -66,17 +67,17 @@ If you need to modify the backend address, edit the proxy configuration in `vite
 
 | Route | Page | Auth Required |
 |-------|------|---------------|
-| `/` | Landing Page | None |
-| `/login` | Login Page | None |
-| `/setup` | GitHub App Installation Guide | Login Required |
-| `/dashboard` | Dashboard Overview | Login Required |
-| `/repos` | Repository Management List | Login Required |
-| `/repos/:id` | Repository Details (Overview/Tasks/PR/Logs) | Login Required |
-| `/repos/:id/config` | Translation Configuration (File Selection/Language/Model) | Login Required |
-| `/repos/:id/tasks/:taskId` | Translation Task Real-time Progress | Login Required |
-| `/settings/profile` | Personal Information | Login Required |
-| `/settings/api-key` | OpenRouter API Key Management | Login Required |
-| `/settings/quota` | Translation Quota and Usage Details | Login Required |
+| `/` | Landing page | None |
+| `/login` | Login page | None |
+| `/setup` | GitHub App installation guide | Requires login |
+| `/dashboard` | Dashboard overview | Requires login |
+| `/repos` | Repository management list | Requires login |
+| `/repos/:id` | Repository details (overview/tasks/PR/logs) | Requires login |
+| `/repos/:id/config` | Translation configuration (file selection/language/model) | Requires login |
+| `/repos/:id/tasks/:taskId` | Real-time translation task progress | Requires login |
+| `/settings/profile` | Personal information | Requires login |
+| `/settings/api-key` | OpenRouter API Key management | Requires login |
+| `/settings/quota` | Translation quota and usage details | Requires login |
 
 ---
 
@@ -84,9 +85,11 @@ If you need to modify the backend address, edit the proxy configuration in `vite
 
 During frontend development, all `/api/*` requests are automatically proxied to the backend (to avoid CORS):
 
-%%CODEBLOCK_6%%**GitHub OAuth Login Flow**:
+%%CODEBLOCK_6%%
 
-1. User clicks "Login with GitHub" → frontend redirects directly to `/api/auth/github` (backend redirects to GitHub)
+**GitHub OAuth Login Flow**:
+
+1. User clicks "Login with GitHub" → frontend directly redirects to `/api/auth/github` (backend redirects to GitHub)
 2. After GitHub authorization, callback to `/api/auth/github/callback`
 3. After backend processing, redirect to frontend `/dashboard?token=xxx` or `/setup?token=xxx`
 4. In `App.vue`, automatically extract the `token` parameter from the URL and store it in `localStorage`
@@ -94,11 +97,13 @@ During frontend development, all `/api/*` requests are automatically proxied to 
 
 ---
 
-## Theme Color ExplanationThis project uses **Chinese Red** (`#DE2910`) as the theme color, implemented by overriding Element Plus CSS variables:
+## Theme Color Explanation
+
+This project uses **Chinese Red** (`#DE2910`) as the theme color, achieved by overriding Element Plus CSS variables:
 
 %%CODEBLOCK_7%%
 
-Fonts use **IBM Plex Sans** (body) and **JetBrains Mono** (code/numbers), imported via Google Fonts.
+The font uses **IBM Plex Sans** (body) and **JetBrains Mono** (code/numbers), imported via Google Fonts.
 
 ---
 
@@ -106,9 +111,7 @@ Fonts use **IBM Plex Sans** (body) and **JetBrains Mono** (code/numbers), import
 
 ### Development Build
 
-%%CODEBLOCK_8%%
-
-### Production Deployment (with Nginx)
+%%CODEBLOCK_8%%### Production Deployment (with Nginx)
 
 %%CODEBLOCK_9%%
 
@@ -116,11 +119,9 @@ Fonts use **IBM Plex Sans** (body) and **JetBrains Mono** (code/numbers), import
 
 ## FAQ
 
-### Q: Page shows blank/white
-
-- Ensure npm install has been completed
+### Q: Page shows blank/white- Ensure npm install has completed
 - Check Node.js version ≥ 20
-- Check browser console for errors
+- View browser console errors
 
 ### Q: API request 404 / network error
 
@@ -139,8 +140,8 @@ Fonts use **IBM Plex Sans** (body) and **JetBrains Mono** (code/numbers), import
 
 ### Q: How to switch backend API address
 
-Modify the proxy target in `vite.config.ts`, or configure Nginx reverse proxy in production environment.
+- Modify the proxy target in `vite.config.ts`, or in production environment configure via Nginx reverse proxy.
 
----
+### Q: API request 4001 network error, `{"code":40001,"message":"Invalid or expired OAuth state"}`- Check if the GitHub App authorization callback path is normal.
 
 > If you have any issues, please submit a [GitHub Issue](https://github.com/issues)
