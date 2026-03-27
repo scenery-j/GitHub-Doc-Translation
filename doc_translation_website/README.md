@@ -1,3 +1,8 @@
+<!--TRANSLATION_LINKS_START-->
+#### Supported by [GitHub Doc Translation](https://github.com/scenery-j/GitHub-Doc-Translation)
+> 📖 **其他语言版本**：[English (en)](../translations/en/doc_translation_website/README.md) | [日本語 (ja)](../translations/ja/doc_translation_website/README.md) | [한국어 (ko)](../translations/ko/doc_translation_website/README.md)
+<!--TRANSLATION_LINKS_END-->
+
 # GitHub Doc Translation — 前端快速启动说明
 
 > **前端技术栈**: Vue 3 + Vite + Element Plus + TypeScript + Pinia + Vue Router
@@ -242,8 +247,10 @@ npm run build
 
 ### Q: 如何切换后端 API 地址
 
-修改 `vite.config.ts` 中的 proxy target，或在生产环境通过 Nginx 反向代理配置。
+- 修改 `vite.config.ts` 中的 proxy target，或在生产环境通过 Nginx 反向代理配置。
 
----
+### Q: API 请求 4001 网络错误，`{"code":40001,"message":"Invalid or expired OAuth state"}`
+
+- 检查 GitHub App 授权回调路径是否正常
 
 > 如有问题，请提交 [GitHub Issue](https://github.com/issues)
