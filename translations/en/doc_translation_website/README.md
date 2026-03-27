@@ -142,6 +142,8 @@ The font uses **IBM Plex Sans** (body) and **JetBrains Mono** (code/numbers), im
 
 - Modify the proxy target in `vite.config.ts`, or in production environment configure via Nginx reverse proxy.
 
-### Q: API request 4001 network error, `{"code":40001,"message":"Invalid or expired OAuth state"}`- Check if the GitHub App authorization callback path is normal.
+### Q: API request 4001 network error, `{"code":40001,"message":"Invalid or expired OAuth state"}`
+
+- Check if the GitHub App authorization callback path is normal.
 
 > If you have any issues, please submit a [GitHub Issue](https://github.com/issues)
