@@ -315,9 +315,56 @@ github_doc_translation/
 
 
 ## 页面操作指导
+### 1. 首页使用 github 登录，并完成授权和安装：
+![img.png](docs/images/img.png)
+![img.png](docs/images/img2.png)
+### 2、添加需要翻译的仓库：
+![img.png](docs/images/img19.png)
+
+### 3、选择需要翻译的仓库和文件：
+#### （1）基准语言：当前仓库维护的 markdown 文档的语言
+#### （2）目标语言：需要翻译成的目标语言，支持多选
+![img_1.png](docs/images/img_1.png)
+#### （3）AI 模型设置：当前项目接入 [OpenRouter](https://openrouter.ai/) 平台，支持选择不同的 AI 模型进行翻译。免费、付费 皆有任君选择。
+![img_2.png](docs/images/img_2.png)
+
+### 4、翻译文件配置
+#### (1) 翻译分支配置：支持配置多个分支的翻译配置，每个分支可以配置不同的翻译规则。
+#### (2) 自动触发翻译：开启后，当基准语言的文档发生变更时，会自动触发增量翻译，完成翻译后会提交 Pull Request
+#### (3) 翻译完成后自动合并 PR：开启后，当翻译完成时，会自动合并 Pull Request
+#### (4) .gitdoc-ignore 忽略文件配置：支持配置忽略的文件或目录，翻译时会跳过这些文件或目录
+![img_3.png](docs/images/img_3.png)
+
+### 5、翻译任务管理
+#### （1）任务列表：显示当前翻译任务的语言、文件、进展和当前任务所消耗的 token 数
+![img_4.png](docs/images/img_4.png)
+#### （2）PR 状态：显示当前 Pull Request 的状态
+![img_5.png](docs/images/img_5.png)
+![img_9.png](docs/images/img_9.png)
+
+### 6、翻译完成提交 PR
+用户可以根据翻译后的 PR 信息，选择是否需要合并
+![img_11.png](docs/images/img_11.png)
+![img_10.png](docs/images/img_10.png)
+合并后的文件信息：
+![img_12.png](docs/images/img_12.png)
+![img_13.png](docs/images/img_13.png)
+
+### 7、平台提供 `100.0k tokens` 的免费翻译额度，如果需要更强大的翻译模型，可以配置自己的 OpenRouter API Key
+![img_7.png](docs/images/img_7.png)
+![img_8.png](docs/images/img_8.png)
+
+### 8、webhook 感知基准语言变更触发增量翻译 
+感知回调创建增量的翻译任务
+![img_14.png](docs/images/img_14.png)
+![img_15.png](docs/images/img_15.png)
+创建增量翻译 PR
+![img_16.png](docs/images/img_16.png)
+![img_17.png](docs/images/img_17.png)
 
 
-
+### 9、最终翻译结果
+![img_18.png](docs/images/img_18.png)
 ---
 
 ## 致谢

@@ -9,7 +9,6 @@
 #
 # 访问：http://localhost（80 端口）
 # =============================================================
-version: '3.8'
 services:
 
   # ── PostgreSQL 数据库 ───────────────────────────────────────
@@ -146,10 +145,11 @@ services:
       start_period: 10s  # Nginx 启动极快，10 秒足够
 
 # ── 命名卷（数据持久化）───────────────────────────────────────
-# 命名卷由 Docker 管理，存储在宿主机的 /var/lib/docker/volumes/
-# 容器删除重建后数据仍然保留
+# 使用 external: true 复用已存在的卷
 volumes:
   postgres_data:
+    external: true
     name: doc_trans_postgres_data
   redis_data:
+    external: true
     name: doc_trans_redis_data
